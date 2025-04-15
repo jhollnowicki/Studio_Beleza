@@ -13,7 +13,7 @@ def get_connection():
             user=os.getenv('DB_USER'),  
             password=os.getenv('DB_PASSWORD'),  
             database=os.getenv('DB_NAME'), 
-            ssl_disabled=False  
+            
         )
         return connection
     except mysql.connector.Error as err:
