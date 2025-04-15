@@ -1,13 +1,11 @@
-import mysql.connector
 from db import get_connection
 
-def test_connection():
+try:
     connection = get_connection()
     if connection:
-        print("Conexão com o banco de dados estabelecida com sucesso!")
-        connection.close()  # Feche a conexão após o teste
+        print("Conexão bem-sucedida!")
+        connection.close()
     else:
-        print("Falha ao conectar com o banco de dados.")
-
-if __name__ == "__main__":
-    test_connection()
+        print("Erro ao conectar: conexão retornou None")
+except Exception as e:
+    print("Erro de conexão:", e)
