@@ -16,7 +16,7 @@ def home():
 
     try:
         # Executar consulta
-        cursor.execute("SELECT * FROM serviços")  # Certifique-se de que a tabela é realmente "servicos" sem acento
+        cursor.execute("SELECT * FROM servicos")  # Certifique-se de que a tabela é realmente "servicos" sem acento
         services = cursor.fetchall()
     except Exception as e:
         print(f"Erro ao executar a consulta: {e}")  # Mostra o erro no terminal para depuração
@@ -42,16 +42,20 @@ def enviar_agendamento():
     connection = get_connection()
     if connection:
         cursor = connection.cursor()
-        cursor.execute("""
-            INSERT INTO agendamentos (nome_cliente, email, telefone, servico_id, data_hora)
-            VALUES (%s, %s, %s, %s, %s)
-        """, (nome, email, telefone, servico_id, data_hora))
-        connection.commit()
-        cursor.close()
-        connection.close()
+        try:
+            cursor.execute("""
+                INSERT INTO agendamentos (nome_cliente, email, telefone, servico_id, data_hora)
+                VALUES (%s, %s, %s, %s, %s)
+            """, (nome, email, telefone, servico_id, data_hora))
+            connection.commit()
+        except Exception as e:
+            print(f"Erro ao inserir agendamento: {e}")
+            return f"Erro ao salvar agendamento: {e}"
+        finally:
+            cursor.close()
+            connection.close()
 
     return redirect(url_for('home'))
-
 
 if __name__ == '__main__':
     app.run(debug=True)
