@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-br" class="scroll-smooth">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -13,19 +13,13 @@
       <h1 class="text-2xl font-bold text-pink-600">Studio Beleza Feminina</h1>
       <a href="#agendar" class="bg-pink-600 text-white px-4 py-2 rounded-lg hover:bg-pink-700 transition">Agendar</a>
     </div>
-    <style>
-        html {
-          scroll-behavior: smooth;
-          scroll-padding-top: 100px;
-        }
-      </style>
-      
   </header>
 
-  <section class="py-12 bg-pink-100" >
-
+  <section class="py-12 bg-pink-100">
     <div class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row items-center gap-8">
-      <img src="https://source.unsplash.com/600x400/?spa,beauty" alt="Estúdio de estética" class="rounded-lg shadow-lg w-full md:w-1/2">
+      <img src="{{ url_for('static', filename='imagens/logo.png') }}" alt="Logo" class="rounded-lg shadow-lg max-w-xs w-full">
+
+
       <div class="text-center md:text-left">
         <h2 class="text-4xl font-bold mb-4">Sua beleza merece o melhor cuidado</h2>
         <p class="mb-6">Tratamentos faciais, massagens, depilação e muito mais em um espaço feito para você relaxar e se cuidar</p>
@@ -39,14 +33,16 @@
       <h3 class="text-3xl font-bold text-center mb-10">Nossos Serviços</h3>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
         {% for service in services %}
-          <div class="bg-pink-50 p-6 rounded-lg shadow">
-            <h4 class="font-bold text-xl mb-2">{{ service[1] }}</h4>
-            <p>{{ service[2] }}</p> 
-          </div>
-        {% endfor %}
+        <div class="bg-pink-50 p-6 rounded-lg shadow">
+          <h4 class="font-bold text-xl mb-2">{{ service[1] }}</h4> 
+          <p>{{ service[2] }}</p>  
+        </div>
+      {% endfor %}
+      
       </div>
     </div>
   </section>
+  
 
   <form id="agendar" action="/enviar" method="POST" class="bg-white p-6 rounded-lg shadow-lg max-w-md mx-auto border border-gray-300">
     <h3 class="text-3xl font-bold text-center mb-6 text-pink-600">Agende seu horário</h3>
@@ -68,30 +64,47 @@
       <label for="servico" class="block text-gray-700 font-semibold">Escolha o Serviço</label>
       <select name="servico_id" class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition" required>
         <option value="">Selecione um serviço</option>
-        <option value="1">Depilação</option>
-        <option value="2">Manicure e Pedicure</option>
-        <option value="3">Corte de Cabelo</option>
-        <option value="4">Pintura de Cabelo</option>
-        <option value="5">Hidratação Capilar</option>
-        <option value="6">Design de Sobrancelhas</option>
+        <option value="1">Limpeza de Pele</option>
+        <option value="2">Massagem Relaxante</option>
+        <option value="3">Design de Sobrancelhas</option>
+        <option value="4">Depilação</option>
+        <option value="5">Manicure e Pedicure</option>
+        <option value="6">Corte de Cabelo</option>
+        <option value="7">Pintura de Cabelo</option>
+        <option value="8">Hidratação Capilar</option>
       </select>
     </div>
     
     <div class="mb-6">
-      <input type="datetime-local" name="data_hora" class="w-full p-4 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-pink-500 transition" required>
+      <label class="block text-gray-700 font-semibold">Data</label>
+      <input type="date" id="data" name="data" required class="w-full p-4 border-2 rounded-lg">
+    
+      <div id="hora-container" style="display: none;" class="mt-4">
+        <label class="block text-gray-700 font-semibold">Horário</label>
+        <select name="hora" required class="w-full p-4 border-2 rounded-lg">
+          <option value="">Escolha um horário</option>
+          <option value="09:00">09:00</option>
+          <option value="10:00">10:00</option>
+          <option value="11:00">11:00</option>
+          <option value="12:00">12:00</option>
+          <option value="13:00">13:00</option>
+          <option value="14:00">14:00</option>
+          <option value="15:00">15:00</option>
+          <option value="16:00">16:00</option>
+          <option value="17:00">17:00</option>
+        </select>
+      </div>
     </div>
+    
   
     <button type="submit" class="bg-pink-600 text-white py-3 px-6 w-full rounded-lg hover:bg-pink-700 transition">
       Enviar
     </button>
   </form>
-  
-  
-  
+
   <footer class="bg-white p-6 text-center text-sm text-gray-500">
     © 2025 Studio Beleza Feminina. Todos os direitos reservados.
   </footer>
-
-  
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>
