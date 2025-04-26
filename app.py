@@ -122,25 +122,41 @@ def agendar():
 
 
 
+from datetime import datetime
+
 @app.route('/painel')
 def painel():
     if 'usuario' not in session:
         return redirect(url_for('login'))
+    
+    data_filtro = request.args.get('data_filtro')
+    
+    if not data_filtro:
+       
+        data_filtro = datetime.today().strftime('%Y-%m-%d')
+    
     connection = get_connection()
     try:
         with get_dict_cursor(connection) as cursor:
-            cursor.execute(
-                """SELECT a.id, a.nome_cliente, a.telefone, s.nome AS servico, a.data_hora, a.status
+            query = """
+                SELECT a.id, a.nome_cliente, a.telefone, s.nome AS servico, a.data_hora, a.status
                 FROM agendamentos a
                 JOIN servicos s on a.servico_id = s.id
-                ORDER BY a.data_hora DESC"""
-            )
+                WHERE DATE(a.data_hora) = %s
+                ORDER BY a.data_hora DESC
+            """
+            
+            params = (data_filtro,)
+            
+            cursor.execute(query, params)
             agendamentos = cursor.fetchall()
-        return render_template('painel.html', agendamentos = agendamentos)
-    except Exception as e :
+            
+        return render_template('painel.html', agendamentos=agendamentos)
+    except Exception as e:
         return render_template('erro.html', mensagem=f'Erro ao buscar agendamentos: {str(e)}')
     finally:
         connection.close()
+
 
 @app.route('/atualizar_status_agendamento/<int:agendamento_id>', methods=['POST'])
 def atualizar_status(agendamento_id):
